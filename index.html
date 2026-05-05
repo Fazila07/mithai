@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mithai 2.0 — Modern Mithai. Honest Ingredients.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --maroon: #6B1F1F;
+    --maroon-light: #8B2F2F;
+    --maroon-dark: #4A1515;
+    --maroon-pale: #F9F0F0;
+    --yellow: #E3B448;
+    --yellow-light: #F0CA6A;
+    --yellow-pale: #FDF8EC;
+    --white: #FFFFFF;
+    --off-white: #FAFAF8;
+    --cream: #F7F3EE;
+    --text-dark: #2A1810;
+    --text-mid: #5C3D2E;
+    --text-light: #9B7B6A;
+    --border: rgba(107,31,31,0.1);
+    --shadow-soft: 0 4px 24px rgba(107,31,31,0.08);
+    --shadow-card: 0 2px 16px rgba(107,31,31,0.07);
+    --shadow-hover: 0 8px 32px rgba(107,31,31,0.14);
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'DM Sans',sans-serif; background:var(--off-white); color:var(--text-dark); overflow-x:hidden; }
+
+  /* NAV */
+  nav { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.93); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+  .nav-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:0 24px; height:68px; }
+  .nav-links { display:flex; gap:28px; list-style:none; }
+  .nav-links a { font-size:13px; font-weight:500; letter-spacing:.04em; color:var(--text-mid); text-decoration:none; text-transform:uppercase; transition:color .2s; }
+  .nav-links a:hover { color:var(--maroon); }
+  .nav-logo { text-align:center; text-decoration:none; }
+  .nav-logo .logo-main { display:block; font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--maroon); letter-spacing:.01em; line-height:1; }
+  .nav-logo .logo-sub { font-size:9px; letter-spacing:.18em; color:var(--yellow); text-transform:uppercase; font-weight:600; }
+  .nav-icons { display:flex; justify-content:flex-end; align-items:center; gap:12px; }
+  .nav-icon { width:38px; height:38px; border-radius:50%; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; color:var(--text-mid); position:relative; }
+  .nav-icon:hover { background:var(--maroon-pale); color:var(--maroon); }
+  .cart-badge { position:absolute; top:-4px; right:-4px; background:var(--yellow); color:var(--maroon); font-size:9px; font-weight:700; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .hamburger { display:none; flex-direction:column; gap:4px; cursor:pointer; background:none; border:none; }
+  .hamburger span { width:22px; height:2px; background:var(--maroon); border-radius:2px; display:block; }
+
+  /* HERO */
+  .hero { min-height:100vh; padding-top:68px; background:var(--cream); position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
+  .hero-bg-pattern { position:absolute; inset:0; opacity:.04; background-image:radial-gradient(circle,var(--maroon) 1px,transparent 1px); background-size:32px 32px; pointer-events:none; }
+  .hero-blob { position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none; opacity:.35; }
+  .hero-blob-1 { width:500px; height:500px; background:var(--yellow-light); top:-100px; right:-100px; }
+  .hero-blob-2 { width:400px; height:400px; background:rgba(107,31,31,.18); bottom:-50px; left:-80px; }
+  .hero-content { max-width:1200px; margin:0 auto; padding:80px 24px; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; position:relative; z-index:1; }
+  .hero-text .badge { display:inline-flex; align-items:center; gap:6px; background:var(--yellow-pale); border:1px solid rgba(227,180,72,.3); padding:6px 14px; border-radius:100px; font-size:12px; font-weight:600; color:var(--maroon); letter-spacing:.08em; text-transform:uppercase; margin-bottom:24px; }
+  .badge-dot { width:6px; height:6px; border-radius:50%; background:var(--yellow); }
+  .hero-text h1 { font-family:'Playfair Display',serif; font-size:clamp(36px,5vw,62px); font-weight:700; line-height:1.1; color:var(--maroon-dark); margin-bottom:20px; }
+  .hero-text h1 em { font-style:italic; color:var(--yellow); }
+  .hero-text p { font-size:15px; color:var(--text-light); line-height:1.7; max-width:420px; margin-bottom:32px; }
+  .hero-pills { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:36px; }
+  .pill { padding:6px 14px; border-radius:100px; font-size:12px; font-weight:500; border:1px solid rgba(107,31,31,.2); color:var(--maroon); background:white; }
+  .hero-cta { display:flex; gap:12px; flex-wrap:wrap; }
+
+  .btn-primary { background:var(--maroon); color:white; padding:14px 32px; border-radius:100px; font-size:14px; font-weight:600; letter-spacing:.04em; border:none; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:all .25s; box-shadow:0 4px 20px rgba(107,31,31,.3); }
+  .btn-primary:hover { background:var(--maroon-light); transform:translateY(-2px); box-shadow:0 8px 28px rgba(107,31,31,.35); }
+  .btn-secondary { background:transparent; color:var(--maroon); padding:14px 28px; border-radius:100px; font-size:14px; font-weight:600; border:1.5px solid rgba(107,31,31,.3); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:all .25s; }
+  .btn-secondary:hover { background:var(--maroon-pale); }
+
+  .hero-visual { position:relative; display:flex; justify-content:center; align-items:center; }
+  .hero-img-wrap { width:360px; height:400px; border-radius:40px 40px 120px 40px; background:linear-gradient(135deg,#E3B448 0%,#C8943A 50%,#6B1F1F 100%); display:flex; align-items:center; justify-content:center; box-shadow:0 24px 60px rgba(107,31,31,.2); position:relative; overflow:hidden; }
+  .hero-img-inner { font-size:110px; filter:drop-shadow(0 8px 24px rgba(0,0,0,.2)); animation:float 4s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  .hero-stats { position:absolute; display:flex; flex-direction:column; gap:10px; }
+  .hero-stats.left { left:-20px; top:50%; transform:translateY(-50%); }
+  .hero-stats.right { right:-20px; bottom:60px; }
+  .stat-card { background:white; border-radius:var(--radius-sm); padding:12px 16px; box-shadow:var(--shadow-soft); min-width:130px; }
+  .stat-card .num { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--maroon); line-height:1; }
+  .stat-card .lbl { font-size:11px; color:var(--text-light); margin-top:2px; }
+
+  /* SECTIONS */
+  section { padding:80px 24px; }
+  .section-inner { max-width:1200px; margin:0 auto; }
+  .section-label { font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--yellow); margin-bottom:10px; }
+  .section-title { font-family:'Playfair Display',serif; font-size:clamp(26px,4vw,40px); font-weight:700; color:var(--maroon-dark); line-height:1.2; margin-bottom:12px; }
+  .section-sub { font-size:15px; color:var(--text-light); max-width:500px; line-height:1.7; }
+  .section-header { margin-bottom:48px; }
+
+  /* WHY US */
+  #why { background:var(--white); }
+  .why-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .why-card { padding:28px 24px; border-radius:var(--radius); background:var(--cream); border:1px solid var(--border); text-align:center; transition:all .25s; }
+  .why-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-hover); border-color:rgba(107,31,31,.2); }
+  .why-icon { width:60px; height:60px; border-radius:16px; background:white; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:var(--shadow-card); }
+  .why-card h3 { font-size:14px; font-weight:600; color:var(--maroon); margin-bottom:6px; }
+  .why-card p { font-size:13px; color:var(--text-light); line-height:1.6; }
+
+  /* CATEGORIES */
+  #categories { background:var(--off-white); }
+  .cat-scroll { display:flex; gap:16px; overflow-x:auto; padding-bottom:8px; scrollbar-width:none; }
+  .cat-scroll::-webkit-scrollbar { display:none; }
+  .cat-card { flex:0 0 170px; border-radius:var(--radius); background:white; border:1px solid var(--border); padding:28px 20px; text-align:center; cursor:pointer; transition:all .25s; text-decoration:none; }
+  .cat-card:hover,.cat-card.active { background:var(--maroon); border-color:var(--maroon); }
+  .cat-card:hover .cat-icon,.cat-card.active .cat-icon { background:rgba(128, 8, 8, 0.15); }
+  .cat-card:hover .cat-name,.cat-card.active .cat-name { color:white; }
+  .cat-card:hover .cat-count,.cat-card.active .cat-count { color:rgba(255,255,255,.6); }
+  .cat-icon { width:56px; height:56px; border-radius:14px; background:var(--cream); margin:0 auto 14px; display:flex; align-items:center; justify-content:center; font-size:26px; transition:all .25s; }
+  .cat-name { font-size:14px; font-weight:600; color:var(--text-dark); transition:color .25s; }
+  .cat-count { font-size:12px; color:var(--text-light); margin-top:4px; transition:color .25s; }
+
+  /* PRODUCTS */
+  #products { background:var(--white); }
+  .products-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .product-card { border-radius:var(--radius); background:var(--cream); border:1px solid var(--border); overflow:hidden; transition:all .25s; cursor:pointer; }
+  .product-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-hover); }
+  .product-img { width:100%; aspect-ratio:1; background:linear-gradient(135deg,#F7F3EE 0%,#EDE3D5 100%); display:flex; align-items:center; justify-content:center; font-size:64px; position:relative; }
+  .product-tag { position:absolute; top:12px; left:12px; background:var(--yellow); color:var(--maroon); font-size:10px; font-weight:700; letter-spacing:.06em; padding:4px 10px; border-radius:100px; text-transform:uppercase; }
+  .product-tag.new { background:var(--maroon); color:white; }
+  .product-info { padding:16px; }
+  .product-name { font-size:14px; font-weight:600; color:var(--text-dark); margin-bottom:4px; }
+  .product-desc { font-size:12px; color:var(--text-light); line-height:1.5; margin-bottom:12px; }
+  .product-footer { display:flex; align-items:center; justify-content:space-between; }
+  .product-price { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--maroon); }
+  .product-price span { font-family:'DM Sans',sans-serif; font-size:11px; color:var(--text-light); font-weight:400; }
+  .add-btn { width:34px; height:34px; border-radius:50%; background:var(--maroon); color:white; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:18px; transition:all .2s; box-shadow:0 4px 12px rgba(107,31,31,.25); }
+  .add-btn:hover { background:var(--maroon-light); transform:scale(1.1); }
+
+  /* BANNER */
+  .banner { background:var(--maroon); padding:56px 24px; text-align:center; position:relative; overflow:hidden; }
+  .banner::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle,rgba(227,180,72,.12) 1px,transparent 1px); background-size:28px 28px; }
+  .banner-inner { max-width:700px; margin:0 auto; position:relative; z-index:1; }
+  .banner h2 { font-family:'Playfair Display',serif; font-size:clamp(24px,4vw,40px); color:white; font-weight:700; margin-bottom:12px; }
+  .banner h2 em { font-style:italic; color:var(--yellow); }
+  .banner p { color:rgba(255,255,255,.7); font-size:15px; margin-bottom:28px; }
+
+  /* BEST SELLERS */
+  #bestsellers { background:var(--yellow-pale); }
+
+  /* INGREDIENTS */
+  #ingredients { background:var(--off-white); }
+  .ing-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .ing-card { border-radius:var(--radius); overflow:hidden; background:white; border:1px solid var(--border); transition:all .25s; }
+  .ing-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-hover); }
+  .ing-visual { height:160px; display:flex; align-items:center; justify-content:center; font-size:72px; }
+  .ing-visual.jaggery { background:linear-gradient(135deg,#FFF3CC,#E3B448); }
+  .ing-visual.millets { background:linear-gradient(135deg,#E8F5E9,#A5D6A7); }
+  .ing-visual.nuts { background:linear-gradient(135deg,#FFF8F0,#FFCC80); }
+  .ing-visual.seeds { background:linear-gradient(135deg,#F3E5F5,#CE93D8); }
+  .ing-info { padding:16px; }
+  .ing-name { font-size:14px; font-weight:700; color:var(--maroon); margin-bottom:4px; }
+  .ing-desc { font-size:12px; color:var(--text-light); line-height:1.5; }
+
+  /* FOUNDER */
+  #founder { background:var(--cream); }
+  .founder-inner { display:grid; grid-template-columns:1fr 1.2fr; gap:60px; align-items:center; }
+  .founder-visual { border-radius:40px 40px 120px 40px; background:linear-gradient(135deg,var(--yellow-pale),var(--maroon-pale)); height:420px; display:flex; align-items:center; justify-content:center; font-size:100px; border:1px solid var(--border); box-shadow:var(--shadow-soft); }
+  .founder-text blockquote { font-family:'Playfair Display',serif; font-size:21px; font-style:italic; color:var(--maroon); line-height:1.6; border-left:3px solid var(--yellow); padding-left:20px; margin-bottom:24px; }
+  .founder-text p { font-size:15px; color:var(--text-mid); line-height:1.8; margin-bottom:16px; }
+  .founder-sig { font-family:'Playfair Display',serif; font-size:20px; font-style:italic; color:var(--maroon); margin-top:20px; }
+  .founder-sig span { display:block; font-family:'DM Sans',sans-serif; font-size:12px; font-style:normal; color:var(--text-light); margin-top:2px; }
+
+  /* TESTIMONIALS */
+  .testimonials { background:var(--white); padding:56px 0; overflow:hidden; }
+  .testi-header { max-width:1200px; margin:0 auto 36px; padding:0 24px; }
+  .testi-track { display:flex; gap:20px; animation:scroll-left 32s linear infinite; width:max-content; }
+  @keyframes scroll-left { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  .testi-card { flex:0 0 300px; background:var(--cream); border-radius:var(--radius); padding:24px; border:1px solid var(--border); }
+  .testi-stars { color:var(--yellow); font-size:14px; margin-bottom:10px; }
+  .testi-text { font-size:14px; color:var(--text-mid); line-height:1.6; margin-bottom:14px; font-style:italic; }
+  .testi-author { font-size:12px; font-weight:600; color:var(--maroon); }
+
+  /* FOOTER */
+  footer { background:var(--maroon-dark); color:white; padding:60px 24px 32px; }
+  .footer-inner { max-width:1200px; margin:0 auto; }
+  .footer-top { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:48px; margin-bottom:48px; }
+  .footer-brand .brand-name { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:white; margin-bottom:4px; }
+  .footer-brand .brand-tag { font-size:10px; letter-spacing:.14em; color:var(--yellow); text-transform:uppercase; margin-bottom:16px; }
+  .footer-brand p { font-size:13px; color:rgba(255,255,255,.55); line-height:1.7; margin-bottom:20px; }
+  .social-links { display:flex; gap:10px; }
+  .social-link { width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.7); text-decoration:none; font-size:14px; transition:all .2s; }
+  .social-link:hover { background:var(--yellow); color:var(--maroon); border-color:var(--yellow); }
+  .footer-col h4 { font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--yellow); margin-bottom:16px; }
+  .footer-col ul { list-style:none; }
+  .footer-col ul li { margin-bottom:10px; }
+  .footer-col ul li a { font-size:13px; color:rgba(255,255,255,.55); text-decoration:none; transition:color .2s; }
+  .footer-col ul li a:hover { color:white; }
+  .footer-bottom { border-top:1px solid rgba(255,255,255,.1); padding-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  .footer-bottom p { font-size:12px; color:rgba(255,255,255,.4); }
+
+  /* WHATSAPP */
+  .wa-btn { position:fixed; bottom:28px; right:28px; z-index:999; width:56px; height:56px; border-radius:50%; background:#25D366; color:white; display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 4px 24px rgba(37,211,102,.4); transition:transform .25s; animation:wa-pulse 3s ease-in-out infinite; }
+  .wa-btn:hover { transform:scale(1.12); }
+  @keyframes wa-pulse { 0%,100%{box-shadow:0 4px 24px rgba(37,211,102,.4)} 50%{box-shadow:0 4px 36px rgba(37,211,102,.7)} }
+
+  /* MOBILE MENU */
+  .mobile-menu { display:none; position:fixed; inset:0; z-index:998; background:white; flex-direction:column; align-items:center; justify-content:center; gap:28px; }
+  .mobile-menu.open { display:flex; }
+  .mobile-menu a { font-size:20px; font-weight:600; color:var(--maroon); text-decoration:none; }
+  .mobile-close { position:absolute; top:24px; right:24px; font-size:28px; cursor:pointer; color:var(--maroon); background:none; border:none; }
+
+  /* RESPONSIVE */
+  @media(max-width:960px){
+    .hero-content{grid-template-columns:1fr; text-align:center;}
+    .hero-text p{max-width:none; margin-left:auto; margin-right:auto;}
+    .hero-pills{justify-content:center;}
+    .hero-cta{justify-content:center;}
+    .hero-visual{display:none;}
+    .why-grid{grid-template-columns:repeat(2,1fr);}
+    .products-grid{grid-template-columns:repeat(2,1fr);}
+    .ing-grid{grid-template-columns:repeat(2,1fr);}
+    .founder-inner{grid-template-columns:1fr;}
+    .founder-visual{height:260px; font-size:72px;}
+    .footer-top{grid-template-columns:1fr 1fr; gap:32px;}
+    .nav-links{display:none;}
+    .hamburger{display:flex;}
+  }
+  @media(max-width:580px){
+    section{padding:56px 16px;}
+    .products-grid{grid-template-columns:repeat(2,1fr); gap:12px;}
+    .why-grid{grid-template-columns:repeat(2,1fr); gap:12px;}
+    .ing-grid{grid-template-columns:repeat(2,1fr); gap:12px;}
+    .footer-top{grid-template-columns:1fr;}
+    .cat-card{flex:0 0 145px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <ul class="nav-links">
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#products">Shop</a></li>
+      <li><a href="#categories">Categories</a></li>
+    </ul>
+
+    <a href="#home" class="nav-logo">
+      <span class="logo-main">Mithai 2.0</span>
+      <span class="logo-sub">Honest Ingredients</span>
+    </a>
+
+    <div class="nav-icons">
+      <div class="nav-icon" title="Search">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div class="nav-icon" id="cartIcon" title="Cart">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </div>
+      <button class="hamburger" onclick="document.getElementById('mobileMenu').classList.add('open')">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">✕</button>
+  <a href="#why" onclick="document.getElementById('mobileMenu').classList.remove('open')">Why Us</a>
+  <a href="#categories" onclick="document.getElementById('mobileMenu').classList.remove('open')">Categories</a>
+  <a href="#products" onclick="document.getElementById('mobileMenu').classList.remove('open')">Shop</a>
+  <a href="#bestsellers" onclick="document.getElementById('mobileMenu').classList.remove('open')">Best Sellers</a>
+  <a href="#founder" onclick="document.getElementById('mobileMenu').classList.remove('open')">Our Story</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="badge"><span class="badge-dot"></span> New Collection — Festive 2025</div>
+      <h1>Modern Mithai.<br><em>Honest</em> Ingredients.</h1>
+      <p>The sweets you grew up loving — reimagined for the way you live today. No guilt. Just pure, joyful indulgence.</p>
+      <div class="hero-pills">
+        <span class="pill">✓ Gluten-Free</span>
+        <span class="pill">✓ Refined Sugar-Free</span>
+        <span class="pill">✓ No Maida</span>
+        <span class="pill">✓ No Preservatives</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#products" class="btn-primary">Shop Now →</a>
+        <a href="#why" class="btn-secondary">Our Promise</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-img-wrap">
+        <div class="hero-img-inner">🍮</div>
+      </div>
+      <div class="hero-stats left">
+        <div class="stat-card"><div class="num">100%</div><div class="lbl">Natural Ingredients</div></div>
+        <div class="stat-card"><div class="num">0g</div><div class="lbl">Refined Sugar</div></div>
+      </div>
+      <div class="hero-stats right">
+        <div class="stat-card"><div class="num">500+</div><div class="lbl">Happy Customers</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Our Promise</div>
+      <h2 class="section-title">Made Different. On Purpose.</h2>
+      <p class="section-sub">Every ingredient is chosen with intention. No shortcuts, no compromises, no fine print.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🌾</div>
+        <h3>Gluten-Free</h3>
+        <p>Made with ancient millet flours. Safe, light, and easy on sensitive tummies.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🍯</div>
+        <h3>Refined Sugar-Free</h3>
+        <p>Sweetened with jaggery, dates & coconut sugar — the way nature intended.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🚫</div>
+        <h3>No Maida</h3>
+        <p>Zero all-purpose flour. We use whole grain and millet alternatives only.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🧪</div>
+        <h3>No Preservatives</h3>
+        <p>Small batches, crafted fresh. Real food shouldn't need a shelf-life of 2 years.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌸</div>
+        <h3>PCOS / PCOD Friendly</h3>
+        <p>Low glycemic ingredients that support hormonal balance and stable energy levels.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🫘</div>
+        <h3>Gut Friendly</h3>
+        <p>Fibre-rich millets and seeds that nourish your microbiome, not disrupt it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Browse</div>
+      <h2 class="section-title">Shop by Category</h2>
+    </div>
+    <div class="cat-scroll">
+      <a class="cat-card active" href="#products">
+        <div class="cat-icon">🍮</div>
+        <div class="cat-name">Mithai</div>
+        <div class="cat-count">12 products</div>
+      </a>
+      <a class="cat-card" href="#products">
+        <div class="cat-icon">🍪</div>
+        <div class="cat-name">Cookies</div>
+        <div class="cat-count">8 products</div>
+      </a>
+      <a class="cat-card" href="#products">
+        <div class="cat-icon">🥜</div>
+        <div class="cat-name">Snacks</div>
+        <div class="cat-count">10 products</div>
+      </a>
+      <a class="cat-card" href="#products">
+        <div class="cat-icon">🥣</div>
+        <div class="cat-name">Instant Mixes</div>
+        <div class="cat-count">6 products</div>
+      </a>
+      <a class="cat-card" href="#products">
+        <div class="cat-icon">🎁</div>
+        <div class="cat-name">Combos</div>
+        <div class="cat-count">5 products</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Our Range</div>
+      <h2 class="section-title">Handcrafted with Love</h2>
+      <p class="section-sub">Each product is made in small batches to ensure the freshness and quality you deserve.</p>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <div class="product-card">
+        <div class="product-img"><span class="product-tag">Bestseller</span>🍬</div>
+        <div class="product-info">
+          <div class="product-name">Millet Ladoo</div>
+          <div class="product-desc">Jowar & ragi ladoos with jaggery, ghee & cardamom. 250g box.</div>
+          <div class="product-footer">
+            <div class="product-price">₹280 <span>/ 250g</span></div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><span class="product-tag new">New</span>🍫</div>
+        <div class="product-info">
+          <div class="product-name">Dark Choco Barfi</div>
+          <div class="product-desc">85% cacao, cashew butter & coconut sugar. Zero compounds.</div>
+          <div class="product-footer">
+            <div class="product-price">₹320 <span>/ 200g</span></div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">🌰</div>
+        <div class="product-info">
+          <div class="product-name">Almond Halwa Mix</div>
+          <div class="product-desc">Ready-to-make instant mix. Just add ghee & milk. 300g.</div>
+          <div class="product-footer">
+            <div class="product-price">₹245 <span>/ 300g</span></div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><span class="product-tag">Bestseller</span>🌿</div>
+        <div class="product-info">
+          <div class="product-name">Ragi Cookies</div>
+          <div class="product-desc">Crispy finger millet cookies with jaggery & sesame. 150g.</div>
+          <div class="product-footer">
+            <div class="product-price">₹190 <span>/ 150g</span></div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">🟡</div>
+        <div class="product-info">
+          <div class="product-name">Til Chikki</div>
+          <div class="product-desc">Classic sesame brittle made with pure jaggery. No additives.</div>
+          <div class="product-footer">
+            <div class="product-price">₹160 <span>/ 200g</span></div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><span class="product-tag new">Combo</span>🎁</div>
+        <div class="product-info">
+          <div class="product-name">Festive Gift Box</div>
+          <div class="product-desc">Curated hamper of 4 bestsellers. Perfect for gifting.</div>
+          <div class="product-footer">
+            <div class="product-price">₹899 <span>/ set</span></div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">🥜</div>
+        <div class="product-info">
+          <div class="product-name">Peanut Jaggery Chikki</div>
+          <div class="product-desc">Crunchy groundnut chikki with farm-fresh jaggery. 250g.</div>
+          <div class="product-footer">
+            <div class="product-price">₹140 <span>/ 250g</span></div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><span class="product-tag">Bestseller</span>🌾</div>
+        <div class="product-info">
+          <div class="product-name">Jowar Puffs</div>
+          <div class="product-desc">Air-popped sorghum puffs with turmeric & black salt. 80g.</div>
+          <div class="product-footer">
+            <div class="product-price">₹120 <span>/ 80g</span></div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-inner">
+    <h2>Your Celebrations Deserve <em>Real</em> Sweets</h2>
+    <p>Free delivery on orders above ₹499 · Same-day dispatch in Hyderabad · Gift wrapping available</p>
+    <a href="#products" class="btn-primary" style="display:inline-flex; margin-top:4px;">Order Now →</a>
+  </div>
+</div>
+
+<!-- BEST SELLERS -->
+<section id="bestsellers">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Community Favourites</div>
+      <h2 class="section-title">Best Sellers This Week</h2>
+      <p class="section-sub">Our community knows best. These fly out of our kitchen every single week.</p>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img"><span class="product-tag">🔥 Hot</span>🍮</div>
+        <div class="product-info">
+          <div class="product-name">Millet Ladoo</div>
+          <div class="product-desc">Our #1 product. Ordered every week, loved every time.</div>
+          <div class="product-footer">
+            <div class="product-price">₹280</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><span class="product-tag">🔥 Hot</span>🌿</div>
+        <div class="product-info">
+          <div class="product-name">Ragi Cookies</div>
+          <div class="product-desc">Loved by kids and adults alike. Truly addictive.</div>
+          <div class="product-footer">
+            <div class="product-price">₹190</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><span class="product-tag">🔥 Hot</span>🎁</div>
+        <div class="product-info">
+          <div class="product-name">Festive Gift Box</div>
+          <div class="product-desc">The most gifted item on birthdays and festivals.</div>
+          <div class="product-footer">
+            <div class="product-price">₹899</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><span class="product-tag">🔥 Hot</span>🌾</div>
+        <div class="product-info">
+          <div class="product-name">Jowar Puffs</div>
+          <div class="product-desc">The snack nobody can stop munching. Ever.</div>
+          <div class="product-footer">
+            <div class="product-price">₹120</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section id="ingredients">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">What Goes In</div>
+      <h2 class="section-title">Ingredients You Can Trust</h2>
+      <p class="section-sub">We believe you deserve to know exactly what you're eating. So here it is — no jargon.</p>
+    </div>
+    <div class="ing-grid">
+      <div class="ing-card">
+        <div class="ing-visual jaggery">🍯</div>
+        <div class="ing-info">
+          <div class="ing-name">Jaggery</div>
+          <div class="ing-desc">Unrefined cane sugar with natural minerals. Lower GI than refined sugar. Sourced from Karnataka farms.</div>
+        </div>
+      </div>
+      <div class="ing-card">
+        <div class="ing-visual millets">🌾</div>
+        <div class="ing-info">
+          <div class="ing-name">Millets</div>
+          <div class="ing-desc">Ragi, jowar, bajra — ancient Indian grains packed with iron, calcium & fibre. Naturally gluten-free.</div>
+        </div>
+      </div>
+      <div class="ing-card">
+        <div class="ing-visual nuts">🌰</div>
+        <div class="ing-info">
+          <div class="ing-name">Nuts</div>
+          <div class="ing-desc">Cashews, almonds, pistachios — whole & unprocessed. Rich in healthy fats and protein. No coatings.</div>
+        </div>
+      </div>
+      <div class="ing-card">
+        <div class="ing-visual seeds">🌻</div>
+        <div class="ing-info">
+          <div class="ing-name">Seeds</div>
+          <div class="ing-desc">Sesame, flax & pumpkin seeds for omega-3s, zinc & antioxidants. Gut-friendly and hormone-supporting.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder">
+  <div class="section-inner">
+    <div class="founder-inner">
+      <div class="founder-visual">👩‍🍳</div>
+      <div class="founder-text">
+        <div class="section-label" style="margin-bottom:12px;">Our Story</div>
+        <blockquote>"I didn't want to give up mithai. I wanted to make it better."</blockquote>
+        <p>Growing up, sweets were how we celebrated everything — from Diwali to just surviving a tough week. But as I started paying attention to what went into them — maida, vanaspati, artificial colours, compound chocolate — something didn't sit right.</p>
+        <p>Mithai 2.0 started in my kitchen, with one question: <em>can traditional Indian sweets be made with honest ingredients, without compromising on taste?</em> Two years and hundreds of recipe experiments later — yes. Absolutely yes.</p>
+        <p>Every product we make is something I'd happily give my own family. That's the only standard we know.</p>
+        <div class="founder-sig">
+          Priya Sharma
+          <span>Founder, Mithai 2.0 · Home Cook turned Honest Baker</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div class="testimonials">
+  <div class="testi-header">
+    <div class="section-label">Love Letters</div>
+    <h2 class="section-title">What Our Customers Say</h2>
+  </div>
+  <div class="testi-track">
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"My PCOS doctor actually approved these! The jaggery ladoos have become my daily sweet fix. Zero guilt."</div><div class="testi-author">— Ananya R., Hyderabad</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Sent the gift box to my parents. They called asking where I got such good barfi. Traditional taste, modern values!"</div><div class="testi-author">— Karthik M., Bangalore</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"The ragi cookies are dangerous. My kids finished the entire pack in one sitting and asked for more!"</div><div class="testi-author">— Sunita P., Mumbai</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Finally a brand that doesn't hide behind 'natural flavours'. The ingredient list has 6 items. That's it."</div><div class="testi-author">— Deepa V., Chennai</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Ordered the festive combo for Diwali gifting and everyone loved it. Will be doing this every year!"</div><div class="testi-author">— Rohit K., Pune</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"The jowar puffs are my office snack now. Light, crunchy, and I don't feel gross after eating a whole bag."</div><div class="testi-author">— Meera S., Delhi</div></div>
+    <!-- Duplicate for loop -->
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"My PCOS doctor actually approved these! The jaggery ladoos have become my daily sweet fix. Zero guilt."</div><div class="testi-author">— Ananya R., Hyderabad</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Sent the gift box to my parents. They called asking where I got such good barfi. Traditional taste, modern values!"</div><div class="testi-author">— Karthik M., Bangalore</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"The ragi cookies are dangerous. My kids finished the entire pack in one sitting and asked for more!"</div><div class="testi-author">— Sunita P., Mumbai</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Finally a brand that doesn't hide behind 'natural flavours'. The ingredient list has 6 items. That's it."</div><div class="testi-author">— Deepa V., Chennai</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Ordered the festive combo for Diwali gifting and everyone loved it. Will be doing this every year!"</div><div class="testi-author">— Rohit K., Pune</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"The jowar puffs are my office snack now. Light, crunchy, and I don't feel gross after eating a whole bag."</div><div class="testi-author">— Meera S., Delhi</div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="brand-name">Mithai 2.0</div>
+        <div class="brand-tag">Modern Mithai. Honest Ingredients.</div>
+        <p>Handcrafted sweets and snacks made with the ingredients your grandmother would recognise. Small batches. Big love. Zero compromises.</p>
+        <div class="social-links">
+          <a class="social-link" href="#" title="Instagram">📸</a>
+          <a class="social-link" href="#" title="Facebook">📘</a>
+          <a class="social-link" href="#" title="YouTube">▶️</a>
+          <a class="social-link" href="https://wa.me/919999999999" title="WhatsApp">💬</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#products">All Products</a></li>
+          <li><a href="#categories">Mithai</a></li>
+          <li><a href="#categories">Cookies</a></li>
+          <li><a href="#categories">Snacks</a></li>
+          <li><a href="#categories">Gift Boxes</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Policies</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Shipping Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@mithai20.in">hello@mithai20.in</a></li>
+          <li><a href="https://wa.me/919999999999">WhatsApp Us</a></li>
+          <li><a href="#">Bulk / B2B Orders</a></li>
+          <li><a href="#founder">Our Story</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Mithai 2.0. Made with ❤️ in India.</p>
+      <p>FSSAI Lic. No. XXXXXXXXXXXXXXXXX</p>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/919999999999?text=Hi%2C%20I%20want%20to%20order%20from%20Mithai%202.0!" class="wa-btn" target="_blank" title="Chat on WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 2C8.268 2 2 8.268 2 16c0 2.4.632 4.65 1.736 6.605L2 30l7.558-1.71A13.93 13.93 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.4a11.36 11.36 0 01-5.788-1.576l-.415-.247-4.487 1.016 1.036-4.37-.272-.44A11.37 11.37 0 014.6 16C4.6 9.698 9.698 4.6 16 4.6S27.4 9.698 27.4 16 22.302 27.4 16 27.4zm6.26-8.575c-.343-.172-2.03-1.002-2.345-1.116-.314-.114-.543-.172-.771.172-.228.343-.888 1.116-1.088 1.344-.2.228-.4.257-.743.086-.343-.172-1.448-.534-2.758-1.702-1.02-.91-1.708-2.034-1.908-2.377-.2-.343-.021-.529.15-.7.155-.154.343-.4.514-.6.172-.2.229-.343.343-.571.115-.228.057-.429-.028-.6-.086-.172-.772-1.86-1.058-2.547-.279-.668-.562-.578-.772-.588l-.657-.011c-.229 0-.6.086-.914.429-.314.343-1.2 1.172-1.2 2.86s1.229 3.318 1.4 3.546c.172.229 2.42 3.695 5.866 5.182.82.354 1.46.565 1.96.724.823.261 1.572.224 2.164.136.66-.099 2.03-.83 2.316-1.632.286-.8.286-1.487.2-1.632-.085-.143-.314-.229-.657-.4z"/>
+  </svg>
+</a>
+
+<script>
+  const BACKEND_BASE = '';
+  const PRODUCTS_ENDPOINT = `${BACKEND_BASE}/api/products`;
+  const CART_ENDPOINT = `${BACKEND_BASE}/api/cart`;
+
+  let cartCount = 0;
+
+  async function fetchBackendJson(url, options = {}) {
+    try {
+      const res = await fetch(url, options);
+      if (!res.ok) {
+        throw new Error(`Request failed: ${res.status}`);
+      }
+      return await res.json();
+    } catch (error) {
+      console.error('Backend request failed:', error);
+      return null;
+    }
+  }
+
+  async function loadProducts() {
+    const data = await fetchBackendJson(PRODUCTS_ENDPOINT);
+    if (!data?.products?.length) return;
+
+    const grid = document.getElementById('productsGrid');
+    if (!grid) return;
+
+    grid.innerHTML = data.products.map(product => `
+      <div class="product-card" data-product-id="${product.id}">
+        <div class="product-img">
+          ${product.tag ? `<span class="product-tag ${product.tag.toLowerCase() === 'new' ? 'new' : ''}">${product.tag}</span>` : ''}
+          ${product.emoji || '🍬'}
+        </div>
+        <div class="product-info">
+          <div class="product-name">${product.name}</div>
+          <div class="product-desc">${product.description}</div>
+          <div class="product-footer">
+            <div class="product-price">₹${product.price} <span>${product.unit || ''}</span></div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>`).join('');
+
+    attachScrollReveal();
+  }
+
+  async function loadCartCount() {
+    const data = await fetchBackendJson(`${CART_ENDPOINT}/count`);
+    if (data?.count >= 0) {
+      cartCount = data.count;
+      document.getElementById('cartBadge').textContent = cartCount;
+    }
+  }
+
+  async function addToCart(btn) {
+    const card = btn.closest('.product-card');
+    const nameEl = card.querySelector('.product-name');
+    const priceEl = card.querySelector('.product-price');
+    const productId = card.dataset.productId || nameEl?.textContent?.trim();
+    const payload = {
+      productId,
+      name: nameEl?.textContent?.trim(),
+      price: Number(priceEl?.textContent?.replace(/₹|[^0-9.]/g, '') || 0),
+      quantity: 1
+    };
+
+    btn.disabled = true;
+    const response = await fetchBackendJson(CART_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    btn.disabled = false;
+
+    if (response?.success) {
+      cartCount++;
+      document.getElementById('cartBadge').textContent = cartCount;
+      const original = btn.textContent;
+      btn.textContent = '✓';
+      btn.style.background = '#2A7A3B';
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.style.background = '';
+      }, 1500);
+    } else {
+      alert(response?.message || 'Unable to add this item to cart. Please try again later.');
+    }
+  }
+
+  function attachScrollReveal() {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.why-card, .product-card, .ing-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      io.observe(el);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadProducts();
+    loadCartCount();
+
+    document.querySelectorAll('.cat-card').forEach(card => {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    attachScrollReveal();
+  });
+</script>
+</body>
+</html>
